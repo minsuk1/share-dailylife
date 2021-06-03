@@ -8,11 +8,11 @@ import myapp.myapp.domain.board.BoardRepository;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class BoardServiceUtils {
 
+
+    // Querydsl이 아닌 dataJPA 사용
     static Board findBoardById(BoardRepository boardRepository, Long boardId) {
-        Board board = boardRepository.findBoardById(boardId);
-        if (board == null) {
-            throw new IllegalArgumentException(String.format("해당하는 board (%s)가 존재하지 않습니다", boardId));
-        }
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글 없음"+boardId));
         return board;
     }
 
