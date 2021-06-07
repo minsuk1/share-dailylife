@@ -43,6 +43,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // {sub=114624539647794169021, name=���μ�, email=palt12301@gmail.com}
         // oAuth2User.getAttributes: 소유자 정보 가져오기
+        System.out.println(registrationId); // google, naver
+        System.out.println(userNameAttributeName); // sub, response
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         Member member = saveOrUpdate(attributes);
