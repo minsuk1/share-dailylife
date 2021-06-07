@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 
+// @ControllerAdvice: @Controller 어노테이션을 가지거나 클래스에서 Exception이 발생되면 이를 감지
+// @ExceptionHandler: @ControllerAdvice 이 명시된 클래스 내부 메소드 에 사용한다.
+// Attribute로 Exception 클래스를 받는다.
+// @ExceptionHandler(XXException.class) 라고 작성한 경우, @ControllerAdvice에서 명시한 클래스에서
+// throw new XXException( .. ) 이 발생하면 핸들러는 이를 감지하고 해당 메소드를 수행한다.
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
