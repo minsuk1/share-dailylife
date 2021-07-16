@@ -66,6 +66,11 @@ public class BoardService {
         return BoardWithCommentInfoResponse.of(board, boardCommentList, member);
     }
 
+    @Transactional(readOnly = true)
+    public BoardInfoResponse OldtrieveBoard(Long boardId) {
+        Board board = BoardServiceUtils.findBoardById(boardRepository, boardId);
+        return BoardInfoResponse.of(board);
+    }
 
     @Transactional
     public void addBoardLike(Long boardId, String name) {

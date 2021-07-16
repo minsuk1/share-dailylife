@@ -41,6 +41,12 @@ public class BoardController {
         return ApiResponse.of(boardService.retrieveBoard(boardId));
     }
 
+    @GetMapping("/api/v1/board2")
+    @ApiOperation(value  = "전체 피드 조회 API")
+    public ApiResponse<BoardInfoResponse> retrieveBoard2(@RequestParam Long boardId) {
+        return ApiResponse.of(boardService.OldtrieveBoard(boardId));
+    }
+
     @PostMapping("/api/v1/board/like/{boardId}")
     @ApiOperation(value = "피드 좋아요 추가 API")
     public ApiResponse<String> addBoardLike(@PathVariable Long boardId, @LoginUser SessionUser user) {
