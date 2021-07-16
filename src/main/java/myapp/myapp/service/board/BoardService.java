@@ -2,11 +2,18 @@ package myapp.myapp.service.board;
 
 import lombok.RequiredArgsConstructor;
 import myapp.myapp.domain.board.Board;
+import myapp.myapp.domain.board.BoardMemberCollection;
 import myapp.myapp.domain.board.BoardRepository;
+import myapp.myapp.domain.comment.Comment;
+import myapp.myapp.domain.comment.CommentRepository;
 import myapp.myapp.domain.member.Member;
 import myapp.myapp.domain.member.MemberRepository;
 import myapp.myapp.service.board.dto.request.CreateBoardRequest;
 import myapp.myapp.service.board.dto.response.BoardInfoResponse;
+import myapp.myapp.service.board.dto.response.BoardWithCommentInfoResponse;
+import myapp.myapp.service.board.dto.response.BoardWithCreatorInfoResponse;
+import myapp.myapp.service.comment.CommentServiceUtils;
+import myapp.myapp.service.member.MemberServiceUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +26,8 @@ public class BoardService {
 
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
+
 
     @Transactional
     public BoardInfoResponse createBoard(CreateBoardRequest request, String name) {
@@ -29,29 +38,34 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<BoardInfoResponse> retrieveBoardList(Long lastBoardId, int size) {
+    public List<BoardWithCreatorInfoResponse> retrieveBoardList(Long lastBoardId, int size) {
         return lastBoardId == 0 ? getLatestBoards(size) : getLatestBoardLessThanId(lastBoardId, size);
     }
 
-    private List<BoardInfoResponse> getLatestBoards(int size) {
+    private List<BoardWithCreatorInfoResponse> getLatestBoards(int size) {
         List<Board> boardList = boardRepository.findBoardsOrderByIdDesc(size);
+        BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
         return boardList.stream()
-                .map(BoardInfoResponse::of)
+                .map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
                 .collect(Collectors.toList());
     }
 
-    private List<BoardInfoResponse> getLatestBoardLessThanId(Long lastBoardId, int size) {
+    private List<BoardWithCreatorInfoResponse> getLatestBoardLessThanId(Long lastBoardId, int size) {
         List<Board> boardList = boardRepository.findBoardsLessThanOrderByIdDescLimit(lastBoardId, size);
+        BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
         return boardList.stream()
-                .map(BoardInfoResponse::of)
+                .map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public BoardInfoResponse retrieveBoard(Long boardId) {
+    public BoardWithCommentInfoResponse retrieveBoard(Long boardId) {
         Board board = BoardServiceUtils.findBoardById(boardRepository, boardId);
-        return BoardInfoResponse.of(board);
+        Member member = MemberServiceUtils.findMemberById(memberRepository, board.getMemberId());
+        List<Comment> boardCommentList = CommentServiceUtils.findAllBoardCommentsByCommentId(commentRepository, board.getId());
+        return BoardWithCommentInfoResponse.of(board, boardCommentList, member);
     }
+
 
     @Transactional
     public void addBoardLike(Long boardId, String name) {
@@ -68,4 +82,5 @@ public class BoardService {
         Board board = BoardServiceUtils.findBoardById(boardRepository, boardId);
         board.cancelLike(member.getId());
     }
+
 }

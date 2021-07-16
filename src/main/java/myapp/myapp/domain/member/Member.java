@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import myapp.myapp.domain.BaseTimeEntity;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 
@@ -49,6 +50,15 @@ public class Member extends BaseTimeEntity {
 
         return this;
     }
+
+//    public void updateMemberInfo(String name, String picture) {
+//        if (StringUtils.hasText(name)) {
+//            this.name = name;
+//        }
+//        if (StringUtils.hasText(picture)) {
+//            this.picture = picture;
+//        }
+//    }
 
     public String getRoleKey() {
         return this.role.getKey();

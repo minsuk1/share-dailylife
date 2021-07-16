@@ -9,6 +9,8 @@ import myapp.myapp.controller.ApiResponse;
 import myapp.myapp.service.board.BoardService;
 import myapp.myapp.service.board.dto.request.CreateBoardRequest;
 import myapp.myapp.service.board.dto.response.BoardInfoResponse;
+import myapp.myapp.service.board.dto.response.BoardWithCommentInfoResponse;
+import myapp.myapp.service.board.dto.response.BoardWithCreatorInfoResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,14 +30,14 @@ public class BoardController {
     }
 
     @GetMapping("/api/v1/board/list")
-    @ApiOperation(value  = "전체 피드 조회 API")
-    public ApiResponse<List<BoardInfoResponse>> retrieveBoardList(@RequestParam long lastBoardId, @RequestParam int size) {
+    @ApiOperation(value  = "특정 피드 조회 API")
+    public ApiResponse<List<BoardWithCreatorInfoResponse>> retrieveBoardList(@RequestParam long lastBoardId, @RequestParam int size) {
         return ApiResponse.of(boardService.retrieveBoardList(lastBoardId, size));
     }
 
-    @GetMapping("/api/v1/board")
     @ApiOperation(value  = "전체 피드 조회 API")
-    public ApiResponse<BoardInfoResponse> retrieveBoard(@RequestParam Long boardId) {
+    @GetMapping("/api/v1/board")
+    public ApiResponse<BoardWithCommentInfoResponse> retrieveBoard(@RequestParam Long boardId) {
         return ApiResponse.of(boardService.retrieveBoard(boardId));
     }
 

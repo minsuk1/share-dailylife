@@ -23,6 +23,7 @@ public class BoardInfoResponse {
     public static BoardInfoResponse of(Board board) {
         BoardInfoResponse response = new BoardInfoResponse(board.getId(), board.getTitle(), board.getDescription());
         response.pictureUrls.addAll(board.getPictures());
+        //System.out.println(board.getPictures());
         return response;
     }
 

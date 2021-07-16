@@ -19,6 +19,8 @@ public class CreateBoardRequest {
     public Board toEntity(Long memberId) {
         Board board = Board.newInstance(memberId, title, description);
         board.addPictures(pictures);
+        System.out.println(board);
+        System.out.println(pictures);
         return board;
     }
 

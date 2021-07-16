@@ -26,7 +26,7 @@ public class CommentServiceUtils {
 
     }
 
-    public static List<Comment> findAllBoardCommentsByCommentId(CommentRepository commentRepository, Long boardId) {
-        return commentRepository.findAllBoardCommentsByBoardId(boardId);
+    public static List<Comment> findAllBoardCommentsByCommentId(CommentRepository boardCommentRepository, Long boardId) {
+        return boardCommentRepository.findAllBoardCommentsByBoardId(boardId);
     }
 }
