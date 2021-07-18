@@ -90,4 +90,14 @@ public class BoardService {
         board.cancelLike(member.getId());
     }
 
+
+    @Transactional(readOnly = true)
+    public List<BoardInfoResponse> retrieveMyBoardList(String name) {
+        Member member = MemberServiceUtils.findMemberByEmail(memberRepository, name);
+        List<Board> boardList = boardRepository.findBoardByMemberId(member.getId());
+        return boardList.stream()
+                .map(BoardInfoResponse::of)
+                .collect(Collectors.toList());
+    }
+
 }
