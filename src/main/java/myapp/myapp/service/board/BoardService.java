@@ -45,6 +45,8 @@ public class BoardService {
     private List<BoardWithCreatorInfoResponse> getLatestBoards(int size) {
         List<Board> boardList = boardRepository.findBoardsOrderByIdDesc(size);
         BoardMemberCollection collection = BoardMemberCollection.of(memberRepository, boardList);
+        System.out.println("board service METHOD");
+        System.out.println(collection); // System.out.println(collection);
         return boardList.stream()
                 .map(board -> BoardWithCreatorInfoResponse.of(board, collection.getMember(board.getMemberId())))
                 .collect(Collectors.toList());

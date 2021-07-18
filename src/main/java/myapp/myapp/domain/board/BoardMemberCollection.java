@@ -23,6 +23,11 @@ public final class BoardMemberCollection {
     }
 
     private Set<Long> getMemberIdsFrom(List<Board> boardList) {
+        System.out.println("getMemberIdsFrom 메소드");
+        System.out.println(boardList.stream() // [1]
+                .map(Board::getMemberId)
+                .collect(Collectors.toList()));
+
         return boardList.stream()
                 .map(Board::getMemberId)
                 .collect(Collectors.toSet());
@@ -33,7 +38,12 @@ public final class BoardMemberCollection {
     }
 
     public Member getMember(Long memberId) {
+
+        System.out.println(memberMap); //{1=myapp.myapp.domain.member.Member@7544e7b0}
+
         return memberMap.get(memberId);
     }
+
+
 
 }
